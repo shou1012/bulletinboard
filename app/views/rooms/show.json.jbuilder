@@ -1,4 +1,4 @@
-json.post do |json|
-  json.title @rooms.name
-  json.body @rooms.description
+json.data do |json|
+  json.rooms_name @rooms.name
+  json.rooms_description @rooms.description
 end
