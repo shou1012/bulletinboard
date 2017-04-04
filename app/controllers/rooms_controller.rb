@@ -11,12 +11,14 @@ class RoomsController < ApplicationController
 
   def create
     @room = Room.new(room_params)
-    if @room.save
-      respond_to do |format|
-        format.json { render json: @room, status: :created }
+    respond_to do |format|
+      if @room.save
+          format.json { render json: @room, status: :created }
+      else
+          format.json {
+            render status: :unprocessable_entity, :json => { :errors => "Invalid Arguments" }
+          }
       end
-    else
-        format.json { render json: @room.errors, status: :unprocessable_entity }
     end
   end
 
