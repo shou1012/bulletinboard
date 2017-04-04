@@ -15,11 +15,13 @@ class RoomsController < ApplicationController
       respond_to do |format|
         format.json { render json: @room, status: :created }
       end
+    else
+        format.json { render json: @room.errors, status: :unprocessable_entity }
     end
   end
 
   private
     def room_params
-      params.permit(:name, :user_id, :description)
+      params.require(:room).permit(:name, :user_id, :description)
     end
 end
