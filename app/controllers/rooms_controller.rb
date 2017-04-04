@@ -11,12 +11,9 @@ class RoomsController < ApplicationController
 
   def create
     @room = Room.new(room_params)
-    p room_params
-    p @room
-
     if @room.save
       respond_to do |format|
-      format.json { render json: @room, status: :created }
+        format.json { render json: @room, status: :created }
       end
     end
   end
