@@ -10,10 +10,11 @@ class RoomsController < ApplicationController
    end
 
   def create
-    logger.debug(params)
-    @room = Room.new()
+    @room = Room.new(room_params)
+    p room_params
+    p @room
 
-    if @room.save(room_params)
+    if @room.save
       respond_to do |format|
       format.json { render json: @room, status: :created }
       end
@@ -23,5 +24,5 @@ class RoomsController < ApplicationController
   private
     def room_params
       params.permit(:name, :user_id, :description)
-  end
+    end
 end
