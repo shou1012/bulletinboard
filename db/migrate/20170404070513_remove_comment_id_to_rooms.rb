@@ -1,0 +1,5 @@
+class RemoveCommentIdToRooms < ActiveRecord::Migration[5.0]
+  def change
+    remove_column :rooms, :comment_id, :string
+  end
+end
