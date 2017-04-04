@@ -1,1 +1,1 @@
-json.index @rooms
+json.rooms @rooms
