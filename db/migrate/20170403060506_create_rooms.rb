@@ -5,7 +5,6 @@ class CreateRooms < ActiveRecord::Migration[5.0]
       t.integer :user_id
       t.string :description
       t.integer :comment_id
-
       t.timestamps
     end
   end
