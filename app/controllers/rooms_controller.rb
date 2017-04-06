@@ -17,9 +17,7 @@ class RoomsController < ApplicationController
       if @room.save
           format.json { render json: @room, status: :created }
       else
-          format.json {
-            render status: :unprocessable_entity, :json => { :errors => "Invalid Arguments" }
-          }
+          format.json { render status: :unprocessable_entity, :json => { :errors => "Invalid Arguments" } }
       end
     end
   end
@@ -30,9 +28,7 @@ class RoomsController < ApplicationController
         if @room.update(room_params)
             format.json { render json: @room, status: :updated }
         else
-            format.json {
-              render status: :unprocessable_entity, :json => { :errors => "Invalid Arguments" }
-            }
+            format.json { render status: :unprocessable_entity, :json => { :errors => "Invalid Arguments" } }
         end
       end
     end
@@ -49,9 +45,7 @@ class RoomsController < ApplicationController
         @room = Room.find(params[:id])
       rescue ActiveRecord::RecordNotFound => e
         respond_to do |format|
-          format.json {
-            render status: :not_found, :json => { :errors => "Data not found" }
-          }
+          format.json { render status: :not_found, :json => { :errors => "Data not found" } }
         end
       end
     end
