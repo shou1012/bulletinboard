@@ -1,5 +1,5 @@
 class RoomsController < ApplicationController
-  before_action :set_room, only: [:update]
+  before_action :set_room, only: [:update, :destroy]
 
   def index
     @rooms = Room.all
@@ -34,6 +34,17 @@ class RoomsController < ApplicationController
     end
   end
 
+  def destroy
+    if @room
+      respond_to do |format|
+        if @room.destroy
+            format.json { head :no_content }
+        else
+            format.json { render status: :unprocessable_entity, :json => { :errors => "Invalid Arguments" } }
+        end
+      end
+    end
+  end
 
   private
     def room_params
