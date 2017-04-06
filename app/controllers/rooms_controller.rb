@@ -1,5 +1,6 @@
 class RoomsController < ApplicationController
-  before_action :set_room, only: [:update, :destroy]
+
+  before_action :set_room, only: [:update, :show, :destroy]
 
   def index
     @rooms = Room.all
@@ -7,7 +8,6 @@ class RoomsController < ApplicationController
   end
 
   def show
-    set_room
     render 'show', formats: 'json', handlers: 'jbuilder'
    end
 
@@ -23,13 +23,13 @@ class RoomsController < ApplicationController
   end
 
   def update
-      respond_to do |format|
-        if @room.update(room_params)
-          format.json { render json: @room, status: :updated }
-        else
-          format.json { render status: :unprocessable_entity, json: { errors: "Invalid Arguments" }}
-        end
+    respond_to do |format|
+      if @room.update(room_params)
+        format.json { render json: @room, status: :updated }
+      else
+        format.json { render status: :unprocessable_entity, json: { errors: "Invalid Arguments" }}
       end
+    end
   end
 
   def destroy
