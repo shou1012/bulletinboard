@@ -7,7 +7,7 @@ class RoomsController < ApplicationController
   end
 
   def show
-    @room = Room.find(params[:id])
+    set_room
     render 'show', formats: 'json', handlers: 'jbuilder'
    end
 
@@ -17,21 +17,20 @@ class RoomsController < ApplicationController
       if @room.save
         format.json { render json: @room, status: :created }
       else
-        format.json { render status: :unprocessable_entity, json: { errors: "Invalid Arguments" } }
+        format.json { render status: :unprocessable_entity, json: { errors: "Invalid Arguments" }}
       end
     end
   end
 
   def update
-    if @room
       respond_to do |format|
         if @room.update(room_params)
           format.json { render json: @room, status: :updated }
         else
-          format.json { render status: :unprocessable_entity, json: { errors: "Invalid Arguments" } }
+
+          format.json { render status: :unprocessable_entity, json: { errors: "Invalid Arguments" }}
         end
       end
-    end
   end
 
   def destroy
@@ -56,7 +55,7 @@ class RoomsController < ApplicationController
         @room = Room.find(params[:id])
       rescue ActiveRecord::RecordNotFound => e
         respond_to do |format|
-          format.json { render status: :not_found, json:{ errors: "Data not found" } }
+          format.json { render status: :not_found, json: { errors: "Data not found" } }
         end
       end
     end
