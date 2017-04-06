@@ -27,7 +27,6 @@ class RoomsController < ApplicationController
         if @room.update(room_params)
           format.json { render json: @room, status: :updated }
         else
-
           format.json { render status: :unprocessable_entity, json: { errors: "Invalid Arguments" }}
         end
       end
@@ -39,7 +38,7 @@ class RoomsController < ApplicationController
         if @room.destroy
           format.json { head :no_content }
         else
-          format.json { render status: :unprocessable_entity, json:{ errors: "Invalid Arguments" } }
+          format.json { render status: :unprocessable_entity, json: { errors: "Invalid Arguments" } }
         end
       end
     end
