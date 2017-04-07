@@ -30,13 +30,11 @@ class Rooms::CommentsController < ApplicationController
   end
 
   def destroy
-    if @comment
-      respond_to do |format|
-        if @comment.destroy
-          format.json { head :no_content }
-        else
-          format.json { render status: :unprocessable_entity, json: { errors: "Invalid Arguments" } }
-        end
+    respond_to do |format|
+      if @comment.destroy
+        format.json { head :no_content }
+      else
+        format.json { render status: :unprocessable_entity, json: { errors: "Invalid Arguments" } }
       end
     end
   end
