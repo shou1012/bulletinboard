@@ -1,6 +1,6 @@
 class Rooms::CommentsController < ApplicationController
   before_action :set_room
-  before_action :set_comment, only: [:update]
+  before_action :set_comment, only: [:update, :destroy]
 
   def index
     @comments = @room.comments
@@ -25,6 +25,16 @@ class Rooms::CommentsController < ApplicationController
         format.json { render json: @comment, status: :updated }
       else
         format.json { render status: :unprocessable_entity, json: { errors: "Invalid Arguments" }}
+      end
+    end
+  end
+
+  def destroy
+    respond_to do |format|
+      if @comment.destroy
+        format.json { head :no_content }
+      else
+        format.json { render status: :unprocessable_entity, json: { errors: "Invalid Arguments" } }
       end
     end
   end
