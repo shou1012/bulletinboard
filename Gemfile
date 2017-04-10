@@ -53,3 +53,10 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'jbuilder', '~> 2.5'
+
+#Authentication
+gem 'devise'
+#Authorization
+gem 'cancancan'
+
+gem 'responders', '~> 2.0'
