@@ -1,2 +1,0 @@
-module Rooms::CommentsHelper
-end
