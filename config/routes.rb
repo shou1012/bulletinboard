@@ -1,9 +1,12 @@
 Rails.application.routes.draw do
   resource :authentication_token, only: [:update, :destroy]
+  resources :users, :only => [:show]
+
   devise_for :users, controllers: {
     sessions: "sessions",
     registrations: 'registrations'
  }
+
   resources :rooms do
     resources :comments, module: :rooms
   end
