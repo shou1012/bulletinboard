@@ -1,107 +1,77 @@
 require 'spec_helper'
+
 describe RoomsController, :type => :request do
   describe 'POST #create' do
     before do
       @params = FactoryGirl.attributes_for(:room)
     end
-    it '201が返ってくる' do
+    it 'ステータス201が返ってくる' do
       post rooms_path, room: @params, format: :json
       expect(response).to be_success
       expect(response.status).to eq 201
     end
-    it 'Roomレコードが1増える' do
+    it 'Roomsレコードが1増える' do
+      post rooms_path, room: @params, format: :json
       expect { post rooms_path, room: @params, format: :json}.to change(Room, :count).by(1)
     end
   end
 
-  # describe 'GET #new' do
-  #   # @room に新しい連絡先を割りあてること
-  #   it "assigns a new Room to @room" do
-  #     get :new
-  #     expect(assigns(:room)).to be_a_new(Room)
-  #   end
-  #   # :new　テンプレートを表示すること
-  #   it "renders the :new template" do
-  #     expect(response).to render_template :new
-  #   end
-  # end
-  #
-  # describe 'GET #edit' do
-  #   # @room に新しい連絡先を割りあてること
-  #   it "assigns the requested room to @room" do
-  #     room = create(:room)
-  #     get :edit, id: room
-  #     expect(assigns(:room)).to eq room
-  #   end
-  #   # :index　テンプレートを表示すること
-  #   it "renders the :edit template" do
-  #     room = create(:room)
-  #     get :edit, id: room
-  #     expect(response).to render_template :edit
-  #   end
-  # end
-
   describe 'GET #show' do
     before do
       @room = FactoryGirl.create(:room)
-      get :show, id: @room.id, format: :json
     end
-
-    it "201が返ってくる" do
+    it "ステータス200が返ってくる" do
+      get '/rooms/:id', id: @room.id, format: :json
       expect(response).to be_success
       expect(response.status).to eq(200)
     end
-
-    # it "responses with json data" do
-    #   json = JSON.parse(response.body)
-    #   expect(json['name']).to eq "room1"
-    #   expect(json['user_id']).to eq 1
-    #   expect(json['description']).to "about room1"
-    # end
+    it "jsonでデータが返ってくる" do
+      get '/rooms/:id', id: @room.id, format: :json
+      json = JSON.parse(response.body)
+      expect(json["room"]["name"]).to eq "room1"
+      expect(json["room"]["user_id"]).to eq 1
+      expect(json["room"]["description"]).to eq "about room1"
+    end
   end
 
-  # describe 'PATCH #update' do
-    # before :each do
-    #   @room = create(:room,
-    #   name: "room1",
-    #   user_id: 1,
-    #   description: "about room1"
-    #   )
-    # end
-    # #要求された@roomを取得すること
-    # it "locates the requersted @room" do
-    #   patch :update, id: @room, room: attributes_for(:room)
-    #   expect(assigns(:room)).to eq (@room)
-    # end
-    # #@roomの属性を変更すること
-    # it "changes @room's attributes" do
-    #   patch :update, id: @room, room: attributes_for(:room,
-    #     name: 'room2', user_id: 2, description: "about room2")
-    #   @room.reload
-    #   expect(@room.name).to eq("room2")
-    #   expect(@room.description).to eq("about room2")
-    # end
-    #
-    # it "redirects to rooms_path" do
-    #   patch :update, id: @room, room: attributes_for(:room)
-    #   expect(response).to redirect_to rooms_path
-    # end
-  # end
+  describe 'PUT #update' do
+    before do
+      @room = FactoryGirl.create(:room)
+      @params = { room: FactoryGirl.attributes_for(:room, description:  'edited')}
+      @path = "/rooms/#{@room.id}.json"
+    end
+    it 'ステータス202が返ってくる' do
+      put @path, @params, format: :json
+      @room.reload
 
-  # describe 'DELETE #destroy' do
-  #   before :each do
-  #     @room = create(:room)
-  #   end
-  #   # データを削除すること
-  #   it "deletes the room" do
-  #     expect{
-  #       delete :destroy, id: @room
-  #     }.to change(Room, :count).by (-1)
-  #   end
-  #   # rooms_indexにリダイレクトすること
-  #   it "redirects to rooms_index" do
-  #     delete :destroy, id: @room
-  #     expect(response).to redirect_to rooms_url
-  #   end
-  # end
+      expect(response).to be_success
+      expect(response.status).to eq 202
+    end
+    #@roomの属性を変更すること
+    it "編集されたデータがjsonで返ってくる" do
+      put @path, @params, format: :json
+      @room.reload
+      json = JSON.parse(response.body)
+      expect(json["name"]).to eq "room1"
+      expect(json["user_id"]).to eq 1
+      expect(json["description"]).to eq "edited"
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    before do
+      @room = FactoryGirl.create(:room)
+      @path = "/rooms/#{@room.id}.json"
+    end
+    it 'レスポンスが返ってくる' do
+      delete @path, format: :json
+      expect(response).to be_success
+    end
+    # データを削除すること
+    it "データが削除される" do
+      expect{
+        delete @path, format: :json
+      }.to change(Room, :count).by (-1)
+    end
+  end
 end

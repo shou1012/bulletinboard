@@ -38,6 +38,7 @@ gem 'jbuilder', '~> 2.5'
 group :development, :test do
   gem 'rspec-rails', '~> 3.5.0'
   gem 'factory_girl_rails', '~> 4.2.1'
+  gem 'pry-rails'
 end
 
 group :test do
