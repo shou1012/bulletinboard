@@ -1,5 +1,5 @@
 class AuthenticationTokensController < ApplicationController
-  before_action :authenticate_user!
+  # before_action :authenticate_user!
 
   def update
     token = current_user.generate_authentication_token
