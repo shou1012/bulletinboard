@@ -34,6 +34,24 @@ describe RoomsController, :type => :request do
     end
   end
 
+  describe 'GET #index' do
+    before do
+      @room = FactoryGirl.create(:room)
+    end
+    it "ステータス200が返ってくる" do
+      get '/rooms', room: @room, format: :json
+      expect(response).to be_success
+      expect(response.status).to eq(200)
+    end
+    it "jsonでデータが返ってくる" do
+      get '/rooms', room: @room, format: :json
+      json = JSON.parse(response.body)
+      expect(json["room"]["name"]).to eq "room1"
+      expect(json["room"]["user_id"]).to eq 1
+      expect(json["room"]["description"]).to eq "about room1"
+    end
+  end
+
   describe 'PUT #update' do
     before do
       @room = FactoryGirl.create(:room)
@@ -43,7 +61,6 @@ describe RoomsController, :type => :request do
     it 'ステータス202が返ってくる' do
       put @path, @params, format: :json
       @room.reload
-
       expect(response).to be_success
       expect(response.status).to eq 202
     end
