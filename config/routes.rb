@@ -1,4 +1,14 @@
 Rails.application.routes.draw do
-  resources :rooms
+  resource :authentication_token, only: [:update, :destroy]
+  resources :users, :only => [:show]
+
+  devise_for :users, controllers: {
+    sessions: "sessions",
+    registrations: 'registrations'
+ }
+
+  resources :rooms do
+    resources :comments, module: :rooms
+  end
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
