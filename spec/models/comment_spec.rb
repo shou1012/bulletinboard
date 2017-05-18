@@ -16,19 +16,16 @@ describe Comment do
   end
   # 名前がなければ無効な状態であること
   it "is not valid without a text" do
-    Comment.text = nil
-    expect(comment).to_not be_valid
+    expect(FactoryGirl.build(:comment, text: nil)).to_not be_valid
   end
   # room_idがなければ無効な状態であること
   it "is not valid without a room_id" do
-    Comment.room_id = nil
-    expect(comment).to_not be_valid
+    expect(FactoryGirl.build(:comment, room_id: nil)).to_not be_valid
   end
 
   # user_idがなければ無効な状態であること
   it "is not valid without a user_id" do
-    Comment.user_id = nil
-    expect(comment).to_not be_valid
+    expect(FactoryGirl.build(:comment, user_id: nil)).to_not be_valid
   end
 
   # 名前と詳細を文字列として返すこと

@@ -19,36 +19,40 @@ describe RoomsController, :type => :request do
   describe 'GET #show' do
     before do
       @room = FactoryGirl.create(:room)
+      @path = "/rooms/#{@room.id}"
     end
     it "ステータス200が返ってくる" do
-      get '/rooms/:id', id: @room.id, format: :json
+      get @path, format: :json
       expect(response).to be_success
       expect(response.status).to eq(200)
     end
     it "jsonでデータが返ってくる" do
-      get '/rooms/:id', id: @room.id, format: :json
+      get @path, format: :json
       json = JSON.parse(response.body)
-      expect(json["room"]["name"]).to eq "room1"
-      expect(json["room"]["user_id"]).to eq 1
-      expect(json["room"]["description"]).to eq "about room1"
+      expect(json["room"]["name"]).to eq @room.name
+      expect(json["room"]["user_id"]).to eq @room.user_id
+      expect(json["room"]["description"]).to eq @room.description
     end
   end
 
   describe 'GET #index' do
     before do
-      @room = FactoryGirl.create(:room)
+      @rooms = FactoryGirl.create_list(:room, 10)
     end
     it "ステータス200が返ってくる" do
-      get '/rooms', room: @room, format: :json
+      get '/rooms', format: :json
       expect(response).to be_success
       expect(response.status).to eq(200)
     end
     it "jsonでデータが返ってくる" do
-      get '/rooms', room: @room, format: :json
+      get '/rooms', format: :json
       json = JSON.parse(response.body)
-      expect(json["room"]["name"]).to eq "room1"
-      expect(json["room"]["user_id"]).to eq 1
-      expect(json["room"]["description"]).to eq "about room1"
+      # 要素が全て取得できていることを確認する
+      expect(json["rooms"].length).to eq @rooms.length
+      # 値が入っていることを確認する(残りは同じなので、1つめだけ確認する)
+      expect(json["rooms"][0]["name"]).to eq @rooms.first.name
+      expect(json["rooms"][0]["user_id"]).to eq @rooms.first.user_id
+      expect(json["rooms"][0]["description"]).to eq @rooms.first.description
     end
   end
 
@@ -64,13 +68,12 @@ describe RoomsController, :type => :request do
       expect(response).to be_success
       expect(response.status).to eq 202
     end
-    #@roomの属性を変更すること
     it "編集されたデータがjsonで返ってくる" do
       put @path, @params, format: :json
       @room.reload
       json = JSON.parse(response.body)
-      expect(json["name"]).to eq "room1"
-      expect(json["user_id"]).to eq 1
+      expect(json["name"]).to eq @room.name
+      expect(json["user_id"]).to eq @room.user_id
       expect(json["description"]).to eq "edited"
     end
   end
@@ -84,7 +87,6 @@ describe RoomsController, :type => :request do
       delete @path, format: :json
       expect(response).to be_success
     end
-    # データを削除すること
     it "データが削除される" do
       expect{
         delete @path, format: :json

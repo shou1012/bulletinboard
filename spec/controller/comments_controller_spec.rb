@@ -7,47 +7,48 @@ describe Rooms::CommentsController, :type => :request do
       @params = FactoryGirl.attributes_for(:comment)
     end
     it '201が返ってくる' do
-      post "/rooms/:room_id/comments", comment: @params , format: :json
+      post "/rooms/#{@room.id}/comments", comment: @params , format: :json
       expect(response).to be_success
       expect(response.status).to eq 201
     end
     it 'commentレコードが1増える' do
-      expect { post "/rooms/:room_id/comments", comment: @params, format: :json}.to change(Comment, :count).by(1)
+      expect { post "/rooms/#{@room.id}/comments", comment: @params, format: :json}.to change(Comment, :count).by(1)
     end
   end
 
   describe 'GET #index' do
     before do
-      @params = FactoryGirl.create(:comment)
+      @room = FactoryGirl.create(:room_with_comments)
     end
     it "200が返ってくる" do
-      get "/rooms/:id/comments", comment: @params, format: :json
+      get "/rooms/#{@room.id}/comments", format: :json
       expect(response).to be_success
       expect(response.status).to eq(200)
     end
-    it "responses with json data" do
-      get "/rooms/:id/comments", comment: @params, format: :json
+    it "jsonでデータが返ってくる" do
+      get "/rooms/#{@room.id}/comments", format: :json
       json = JSON.parse(response.body)
-      expect(json["comments"["text"]]).to eq "comment about room1"
-      expect(json["user_id"]).to eq 1
-      expect(json["room_id"]).to eq 0
+      expect(json["comments"].length).to eq @room.comments.length
+      expect(json["comments"][0]["text"]).to eq @room.comments.first.text
+      expect(json["comments"][0]["user_id"]).to eq 1
+      expect(json["comments"][0]["room_id"]).to eq @room.id
     end
   end
 
   describe 'PUT #update' do
     before do
-      @comment = FactoryGirl.create(:comment)
+      @room = FactoryGirl.create(:room_with_comments, comments_count: 1)
+      @comment = @room.comments.first
       @params = FactoryGirl.attributes_for(:comment, text: "edited")
     end
     it '202が返ってくる' do
-      put "/rooms/:room_id/comments/:id", comment: @params, format: :json
+      put "/rooms/#{@room.id}/comments/#{@comment.id}", comment: @params, format: :json
       @comment.reload
       expect(response).to be_success
       expect(response.status).to eq 202
     end
-    #@commentの属性を変更すること
-    it "changes @comment's attributes" do
-      put "/rooms/:room_id/comments/:id", comment: @params, format: :json
+    it "jsonで更新したデータが返ってくる" do
+      put "/rooms/#{@room.id}/comments/#{@comment.id}", comment: @params, format: :json
       @comment.reload
       json = JSON.parse(response.body)
       expect(json["text"]).to eq "edited"
@@ -56,16 +57,17 @@ describe Rooms::CommentsController, :type => :request do
 
   describe 'DELETE #destroy' do
     before do
-      @comment = FactoryGirl.create(:comment)
+      @room = FactoryGirl.create(:room_with_comments, comments_count: 1)
+      @comment = @room.comments.first
     end
     it 'レスポンスが返ってくる' do
-      delete "/rooms/:room_id/comments/:id", format: :json
+      delete "/rooms/#{@room.id}/comments/#{@comment.id}", format: :json
       expect(response).to be_success
     end
     # データを削除すること
-    it "deletes the comment" do
+    it "commentが削除される" do
       expect{
-        delete "/rooms/:room_id/comments/:id", format: :json
+        delete "/rooms/#{@room.id}/comments/#{@comment.id}", format: :json
       }.to change(Comment, :count).by (-1)
     end
   end
