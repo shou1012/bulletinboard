@@ -1,18 +1,19 @@
 require 'spec_helper'
 
-describe Rooms::CommentsController, :type => :request do
+describe Rooms::CommentsController, type: :request do
   describe 'POST #create' do
     before do
       @room = FactoryGirl.create(:room)
-      @params = FactoryGirl.attributes_for(:comment)
+      @params = FactoryGirl.attributes_for(:comment, room: @room)
+      @path = "/rooms/#{@room.id}/comments"
     end
     it '201が返ってくる' do
-      post "/rooms/#{@room.id}/comments", comment: @params , format: :json
+      post @path, comment: @params, format: :json
       expect(response).to be_success
       expect(response.status).to eq 201
     end
     it 'commentレコードが1増える' do
-      expect { post "/rooms/#{@room.id}/comments", comment: @params, format: :json}.to change(Comment, :count).by(1)
+      expect { post @path, comment: @params, format: :json}.to change(Comment, :count).by(1)
     end
   end
 

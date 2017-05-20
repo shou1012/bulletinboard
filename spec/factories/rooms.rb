@@ -21,7 +21,6 @@ FactoryGirl.define do
         create_list(:comment, evaluator.comments_count, room: room)
       end
     end
-
   end
 
 end

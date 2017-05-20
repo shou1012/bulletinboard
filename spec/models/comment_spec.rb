@@ -18,10 +18,6 @@ describe Comment do
   it "is not valid without a text" do
     expect(FactoryGirl.build(:comment, text: nil)).to_not be_valid
   end
-  # room_idがなければ無効な状態であること
-  it "is not valid without a room_id" do
-    expect(FactoryGirl.build(:comment, room_id: nil)).to_not be_valid
-  end
 
   # user_idがなければ無効な状態であること
   it "is not valid without a user_id" do
