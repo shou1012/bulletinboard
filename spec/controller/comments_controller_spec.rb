@@ -7,12 +7,12 @@ describe Rooms::CommentsController, type: :request do
       @params = FactoryGirl.attributes_for(:comment, room: @room)
       @path = "/rooms/#{@room.id}/comments"
     end
-    it '201が返ってくる' do
+    it 'returns status 201' do
       post @path, comment: @params, format: :json
       expect(response).to be_success
       expect(response.status).to eq 201
     end
-    it 'commentレコードが1増える' do
+    it 'increases comment count by 1' do
       expect { post @path, comment: @params, format: :json}.to change(Comment, :count).by(1)
     end
   end
@@ -21,12 +21,12 @@ describe Rooms::CommentsController, type: :request do
     before do
       @room = FactoryGirl.create(:room_with_comments)
     end
-    it "200が返ってくる" do
+    it "returns status 200" do
       get "/rooms/#{@room.id}/comments", format: :json
       expect(response).to be_success
       expect(response.status).to eq(200)
     end
-    it "jsonでデータが返ってくる" do
+    it "returns data by json" do
       get "/rooms/#{@room.id}/comments", format: :json
       json = JSON.parse(response.body)
       expect(json["comments"].length).to eq @room.comments.length
@@ -42,13 +42,13 @@ describe Rooms::CommentsController, type: :request do
       @comment = @room.comments.first
       @params = FactoryGirl.attributes_for(:comment, text: "edited")
     end
-    it '202が返ってくる' do
+    it 'returns status 202' do
       put "/rooms/#{@room.id}/comments/#{@comment.id}", comment: @params, format: :json
       @comment.reload
       expect(response).to be_success
       expect(response.status).to eq 202
     end
-    it "jsonで更新したデータが返ってくる" do
+    it "returns updated data by json" do
       put "/rooms/#{@room.id}/comments/#{@comment.id}", comment: @params, format: :json
       @comment.reload
       json = JSON.parse(response.body)
@@ -61,12 +61,11 @@ describe Rooms::CommentsController, type: :request do
       @room = FactoryGirl.create(:room_with_comments, comments_count: 1)
       @comment = @room.comments.first
     end
-    it 'レスポンスが返ってくる' do
+    it 'returns success' do
       delete "/rooms/#{@room.id}/comments/#{@comment.id}", format: :json
       expect(response).to be_success
     end
-    # データを削除すること
-    it "commentが削除される" do
+    it "deletes comment" do
       expect{
         delete "/rooms/#{@room.id}/comments/#{@comment.id}", format: :json
       }.to change(Comment, :count).by (-1)

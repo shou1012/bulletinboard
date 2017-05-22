@@ -5,12 +5,12 @@ describe RoomsController, :type => :request do
     before do
       @params = FactoryGirl.attributes_for(:room)
     end
-    it 'ステータス201が返ってくる' do
+    it 'returns status 201' do
       post rooms_path, room: @params, format: :json
       expect(response).to be_success
       expect(response.status).to eq 201
     end
-    it 'Roomsレコードが1増える' do
+    it 'increases rooms count by 1' do
       post rooms_path, room: @params, format: :json
       expect { post rooms_path, room: @params, format: :json}.to change(Room, :count).by(1)
     end
@@ -21,12 +21,12 @@ describe RoomsController, :type => :request do
       @room = FactoryGirl.create(:room)
       @path = "/rooms/#{@room.id}"
     end
-    it "ステータス200が返ってくる" do
+    it "returns status 200" do
       get @path, format: :json
       expect(response).to be_success
       expect(response.status).to eq(200)
     end
-    it "jsonでデータが返ってくる" do
+    it "returns data by json" do
       get @path, format: :json
       json = JSON.parse(response.body)
       expect(json["room"]["name"]).to eq @room.name
@@ -39,12 +39,12 @@ describe RoomsController, :type => :request do
     before do
       @rooms = FactoryGirl.create_list(:room, 10)
     end
-    it "ステータス200が返ってくる" do
+    it "returns status 200" do
       get '/rooms', format: :json
       expect(response).to be_success
       expect(response.status).to eq(200)
     end
-    it "jsonでデータが返ってくる" do
+    it "returns data by json" do
       get '/rooms', format: :json
       json = JSON.parse(response.body)
       # 要素が全て取得できていることを確認する
@@ -62,13 +62,13 @@ describe RoomsController, :type => :request do
       @params = { room: FactoryGirl.attributes_for(:room, description:  'edited')}
       @path = "/rooms/#{@room.id}.json"
     end
-    it 'ステータス202が返ってくる' do
+    it 'returns status 202' do
       put @path, @params, format: :json
       @room.reload
       expect(response).to be_success
       expect(response.status).to eq 202
     end
-    it "編集されたデータがjsonで返ってくる" do
+    it "returns updated data by json" do
       put @path, @params, format: :json
       @room.reload
       json = JSON.parse(response.body)
@@ -83,11 +83,11 @@ describe RoomsController, :type => :request do
       @room = FactoryGirl.create(:room)
       @path = "/rooms/#{@room.id}.json"
     end
-    it 'レスポンスが返ってくる' do
+    it 'returns success' do
       delete @path, format: :json
       expect(response).to be_success
     end
-    it "データが削除される" do
+    it "deletes room" do
       expect{
         delete @path, format: :json
       }.to change(Room, :count).by (-1)
