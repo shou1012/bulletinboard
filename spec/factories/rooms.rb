@@ -1,11 +1,5 @@
 FactoryGirl.define do
 
-  factory :comment  do
-    sequence(:text) { |n| "comment about room#{n}" }
-    user_id 1
-    room
-  end
-
   factory :room do
     sequence(:name) { |n| "room name#{n}" }
     sequence(:description) { |n| "about room#{n}" }

@@ -219,7 +219,7 @@ PLATFORMS
 
 DEPENDENCIES
   cancancan
-  coffee-rails (~> 4.2.1)
+  coffee-rails (~> 4.2)
   database_cleaner (~> 1.0.1)
   devise
   factory_girl_rails (~> 4.2.1)
@@ -236,7 +236,7 @@ DEPENDENCIES
   rake (< 11.0)
   responders (~> 2.0)
   rspec-rails (~> 3.5.0)
-  sass-rails (~> 5.0.5)
+  sass-rails (~> 5.0)
   selenium-webdriver (~> 2.45.0)
   spring
   spring-watcher-listen (~> 2.0.0)
