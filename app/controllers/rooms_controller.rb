@@ -9,7 +9,7 @@ class RoomsController < ApplicationController
 
   def show
     render 'show', formats: 'json', handlers: 'jbuilder'
-   end
+  end
 
   def create
     @room = Room.new(room_params)
@@ -25,7 +25,7 @@ class RoomsController < ApplicationController
   def update
     respond_to do |format|
       if @room.update(room_params)
-        format.json { render json: @room, status: :updated }
+        format.json { render json: @room, status: :accepted }
       else
         format.json { render status: :unprocessable_entity, json: { errors: "Invalid Arguments" }}
       end

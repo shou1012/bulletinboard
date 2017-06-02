@@ -22,7 +22,7 @@ class Rooms::CommentsController < ApplicationController
   def update
     respond_to do |format|
       if @comment.update(comment_params)
-        format.json { render json: @comment, status: :updated }
+        format.json { render json: @comment, status: :accepted }
       else
         format.json { render status: :unprocessable_entity, json: { errors: "Invalid Arguments" }}
       end
